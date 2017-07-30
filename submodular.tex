@@ -2,16 +2,20 @@
 \subsection{submodular}\label{sec:sub}
 In 2013 it was already shown that function in the triggering model, a class of monotone submodular function, can be adaptively seeded \cite{seeman2013adaptive}. However, there are other types of models of submodular functions used to describe influence in networks. In 2015 \cite{badanidiyuru2016locally} an algorithm was suggested to handle the entire class of submodular functions.
 
+\subsubsection{outline}
+We will see that the non-adaptive scenario approximates well, by using dense blocks - i.e. sets of neighbors that there contribution for the (marginal) influence is large, in porportion to their cardinality. We then note that, if approximation of this dense block can be obtained in the adaptive scenario - we can get good approximation. 
+
 \subsubsection{Notations}
 \textbf{adaptive model} Given a set of nodes $X\subseteq V$ and their set of neighbors $\mathcal{N}(X)$ each associated with probability $p_i$, a budget $k\in\mathb{N}$ and an influence function $f:2^{\mathcal{N}(X)}\rightarrow \mathbb{R}$, we would like to find a set $S\subseteq X$, that will cause it's neighbors to materialize with probability $p_i$, thus allowing to select yet $k-|S|$-elements set $T$ from the realized nodes that will maximize $f(T)$.
 \textbf{submodularity}
 We will define the function $$f_T(A):=f(T\cup A)$$, since it captures the notion of marginal value with respect to sime set already selected.
  
 \subsubsection{non-stochastic version}
-In order to understand the intuition behind the algorithm, we will first describe a non-stochastic model of the influence maximization problem. In this version, again we have a set $X\subset V$ of nodes that we can activate, and in this version the nodes neighbors will be activated with probability one. We want to choose a set $T\subseteq S$ of cardinality $t\le k$, and then $k-t$ elements of $\matcal{N}(T)$, that will maximize the influence function. 
+In order to understand the intuition behind the algorithm, we will first describe a non-stochastic model of the influence maximization problem. In this version, again we have a set $X\subset V$ of nodes that we can activate, and in this version the nodes neighbors will be activated with probability one. We want to choose a set $T\subseteq S$ of cardinality $t\le k$, and then $k-t$ elements of $\mathcal{N}(T)$, that will maximize the influence function. 
 
 \textbf{First solution}
-Simple algorithm will select greedily the best node out of $\mathcal{N}(X)$ and then, if nessecary will also insert the node in $X$ that is connected to that best node, i.e. the node that contribute the most to the marginal. In the worst case, $k/2$ best nodes will be selected, and $k/2$ nodes in $X$. 
+Simple algorithm will select greedily the best node out of $\mathcal{N}(X)$ and then, if nessecary will also insert
+ the node in $X$ that is connected to that best node, i.e. the node that contribute the most to the marginal. In the worst case, $k/2$ best nodes will be selected, and $k/2$ nodes in $X$. 
 At least $k/2$ of the nodes we chose gave the best marginal, and since the optimal solution can't do better then choosing $k$ nodes from $\mathcal{N}(X)$ that maximizes marginal, and also adding nodes to existsing set can only decrease their marginal, because of submodularity - we have $1/2$ approximation to the greedy algorithm, and from \ref{thm:nemhauser} we know that the greedy algorithm approximate submodular monotone functions with a factor of $1-\frac{1}{e}$ - Hence this algorithm has $\frac{1-1/e}{2}$ approximation to the optimal solution.
 
 \textbf{Second solution}
@@ -41,18 +45,19 @@ We first assume that some blackbox FindOptimalNonAdaptiveBlock can $\alpha$-appr
 	\LinesNumbered
 	\SetKwFunction{FindBestMatch}{FindBestMatch}
 	\Input{$f:2^{\mathcal{N}(X)}\rightarrow \mathbb{R}_+$, budget $k$}
-	\Output{(S,T)} \BlankLine
-	
-	\While{$\exists \;e \in S_1 \cup S_2 \text{ s.t. } e.matched = False$}
-	\Do{\label{line:loopmatch}
-		$(e_1, e_2) = BestMatch(S_1, S_2)$\;\label{line:BestMatch}
-		$match \gets match \cup \{(e_1, e_2)\}$\;\label{line:add}
-		$e_i.matched \gets True$ for $i=1,2$\;\label{line:true}
+	$S\gets\emptyset$, $q\gets 0$ 
+	\While{$|S|+\sum\limits_{j\in T}{p_j\le k-\frac{3}{\varepsilon}}$}
+	{
+		$(x,B)\gets$ FindOptimalNonAdaptiveBlock$(S,T)$
+		$(S,T) = (S\cup x,T\cup B)$
 	}
 
-	\Return $(S,T)$\; \label{line:bgp}
-	\caption{NonAdaptiveGreedy}\label{algo:genPair}
+	\Return $(S,T)$
+	\caption{NonAdaptiveGreedy}\label{algo:nonAda}
 \end{algorithm}\DecMargin{1em}
 
+\begin{lemma} \label{lemma:approxEpsilon}
+$\forall \varepsilon >0$, assume that in every iteration FindOptimalNonAdaptiveBlock returns a block which is an $\alpha$ approximation to the optimal $\varepsilon$-block. Then, when $k=\Omega(1/\varepsilon^2) algorithm \ref{algo:nonAda} returns a solution $(S,T)$ s..t. $F(T)\ge (1-1/e^{\alpha}-O(\varepsilon))OPT_{NA}$
+\end{lemma}
 
-\begin{example}\label{ex:geedyPair}
+Lemma \ref{lemma:approxEpsilon} shows that we can adaptively seed submodular function,  if we could approximate densest $\varepsilon$ blocks (in polynomial time). 
