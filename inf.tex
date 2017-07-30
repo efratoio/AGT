@@ -1,0 +1,37 @@
+%!TEX root = main.tex
+\subsection{influence maximization}\label{sec:inf}
+The first attempt to model the cascading influence of individuals in a social network in an algorithmic problem was first posed by Domingos and Richardson that introduced the idea that the profit of marketing to an individual may be composed not only from the sales done to that individual, but also from the "network value" - the sales to other individuals that are influenced by him \cite{domingos2001mining}. This idea that was inpired by viral marketing strategies, and was presented as an algorithmic problem.
+In their celebrated seminal work, Kempe Kleinberg and Trados \cite{kempe2003maximizing} introduce new models to capture influence, models that were inspired from mathematical sociology and interacting particals systems. This work also provides an hardness proof to the problem of selecting influencial nodes and presented a class of influence functions that represents the dynamics of adotption, hence suggesting an operational approach to the problem. This is the class of submodular functions. 
+Kempe et al. furthure provided computational experiments that shows that algoritm designed specifically to solve the problem of influence maximization as modeled by them, out perform node selection heuristics as degree scentrality and distance centrality - classical node centrality measures in the field of network graph analysis.
+
+\subsubsection{The model}
+Denote a network graph $G(V,E)$ - a directed graph where nodes represents individuals. A node can be active or inactive. Active nodes can influence their inactive out-neighbors. This influence may be stronger as more neighbors of inactive node becomes active. The influence of the neighbors of a node in its activness can be modeled in various ways.
+\begin{enumerate}
+\item [Linear Threshold Model] 
+Each node $v$ is assigned with a threshold value $\theta_v\in[0,1]$. Each edge from some neighbor $w$ to $b$ has a weight $b_{v,w}$, s.t. 
+$\sum\limits_{w\in N(v)}{b_{v,w}}\le 1$ . Given a $G(V,E)$ network graph, with random thresholds for each node, and weights assigned to the edges as described, and some start set $A_0$ of active nodes the diffusion process progress in discrete steps, where in time $t$ the active set $A_t$ contains all nodes in the set $A_{t-1}$ and also every node $v$ that realizes the condition: $$\sum\limits_{w\in N(v)}{b_{v,w}}>\theta_v$$. The process ends when $A_{t+1}=A_t$
+
+
+\item [Independent Cascade Model]
+In this model we assign each edge a probability $p_{v,w}$ when node $w$ become active it is given once chance to activate $v$ with porbability $p_{v,w}$. Each try to activate one of the neighbors of $w$ will occur once - if $w$ was activated in time $t-1$ then it will try to activate its neighbors in time $t$, and never again. Each try will succeed with probaability $p_{v,w}$, and the probability is calculated independently to every activation trial event. The process ends when no more trial are allowed.
+\end{enumerate}
+In the two models we have an initial active set $A_0$ that causes a series of activations of other nodes over time. We can define now the influence function $$f:2^V\rightarrow \mathbb{R}_+$$ that gives for each set $A\subseteq V$ its excpected number of nodes that will be active at the end of the process. The influence maximization problem can be now defined for a parameter $k$ - what is the $k$ sized set $A$ that will maximize this function?	
+It is shown \cite{kempe2003maximizing} that thos optimization problem in NP hard, and it was shown that for linear threshold model and independent cascade model, an optimal solution can be approximated with a factor of $(1-\frac{1}{e}-\varepsilon)$. The algorithm that obtained this result is a greedy hill-climbing algorithm. 
+
+
+\begin{definition}[Submodular function]
+A function $f:2^U\rightarrow \mathbb{R}_+$ where $U$ is some ground set, is submodular if for each $u\in U$ and $S\subseteq T\subseteq U$ it holds that $$f(S\cap\{u\})-f(S)\ge f(T\cup\{u\})-f(T)$$ A monotone submodular function, is a function as described that is also monotone i.e. for every $u\in U$ and $S\subseteq U$ $$f(S\cup\{u\})\ge f(S)$$
+\end{definition}
+
+Kempe et al. proved that the independet cascade model and linear thershold model are indeed submodular and monotone in the sense the the influence function they define is submodular. Finding $k$-elements subset of a ground set that maximizes submodular function is NP-hard, but Nemhauser et al.  have proved that it can be approximated withing a factor of $(1-\frac{1}{e})$ \cite{nemhauser1978analysis} with a greedy hill climbing algorithm. 
+
+\begin{theorem} \label{thm:nemhauser}
+\cite{nemhauser1978analysis} For a non-negative, monotone submodular function $f$, let $S$ be a set of size $k$ obtained by selecting elements one at a time, each time choosing an element that provides the largest marginal increase in the function value. Let $S^*$ be the set that maximizes the value of $f$ across all $k$-element sets. Then $f(S)\ge(1-\frac{1}{e})f(S^*)$. 
+\end{theorem}
+
+To overcome the fact that the influence functions for the models mentioned are hard to evaluate - simulating several diffusion processes and sampling them, can be used to obtain arbitrarily close approximations, with high probability. Since our main interest in this is to explore the adaptive version of the problem, we'll show similar usage of the sampling technique in solving the adaptiv model that will be introduce later.
+
+\begin{definition}[Triggering model]
+The linear threshold model and independent cascade model are sometimes too broad for approximation guarantees, so a new simpler model was introduced by Kempe et al.- the triggering model. Each node chooses random and independently a "triggering set" $T_v\subseteq N(v)$ according to some distribution on subsets of it's neighbors. A node will become active at time $t$ if one of the nodes in it's triggering set became active in time $t-1$. A proof that this model is also submodular and monotone was provided \cite{kempe2003maximizing}.
+\end{definition}
+

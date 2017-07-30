@@ -1,0 +1,58 @@
+%!TEX root = main.tex
+\subsection{submodular}\label{sec:sub}
+In 2013 it was already shown that function in the triggering model, a class of monotone submodular function, can be adaptively seeded \cite{seeman2013adaptive}. However, there are other types of models of submodular functions used to describe influence in networks. In 2015 \cite{badanidiyuru2016locally} an algorithm was suggested to handle the entire class of submodular functions.
+
+\subsubsection{Notations}
+\textbf{adaptive model} Given a set of nodes $X\subseteq V$ and their set of neighbors $\mathcal{N}(X)$ each associated with probability $p_i$, a budget $k\in\mathb{N}$ and an influence function $f:2^{\mathcal{N}(X)}\rightarrow \mathbb{R}$, we would like to find a set $S\subseteq X$, that will cause it's neighbors to materialize with probability $p_i$, thus allowing to select yet $k-|S|$-elements set $T$ from the realized nodes that will maximize $f(T)$.
+\textbf{submodularity}
+We will define the function $$f_T(A):=f(T\cup A)$$, since it captures the notion of marginal value with respect to sime set already selected.
+ 
+\subsubsection{non-stochastic version}
+In order to understand the intuition behind the algorithm, we will first describe a non-stochastic model of the influence maximization problem. In this version, again we have a set $X\subset V$ of nodes that we can activate, and in this version the nodes neighbors will be activated with probability one. We want to choose a set $T\subseteq S$ of cardinality $t\le k$, and then $k-t$ elements of $\matcal{N}(T)$, that will maximize the influence function. 
+
+\textbf{First solution}
+Simple algorithm will select greedily the best node out of $\mathcal{N}(X)$ and then, if nessecary will also insert the node in $X$ that is connected to that best node, i.e. the node that contribute the most to the marginal. In the worst case, $k/2$ best nodes will be selected, and $k/2$ nodes in $X$. 
+At least $k/2$ of the nodes we chose gave the best marginal, and since the optimal solution can't do better then choosing $k$ nodes from $\mathcal{N}(X)$ that maximizes marginal, and also adding nodes to existsing set can only decrease their marginal, because of submodularity - we have $1/2$ approximation to the greedy algorithm, and from \ref{thm:nemhauser} we know that the greedy algorithm approximate submodular monotone functions with a factor of $1-\frac{1}{e}$ - Hence this algorithm has $\frac{1-1/e}{2}$ approximation to the optimal solution.
+
+\textbf{Second solution}
+From the friendship paradox we can assume that the more influencial nodes will be in $\mathcal{N}(X)$, so we would like to select more nodes from the neighbors of $X$. Set of neighbors and the node from $X$ connected to them will be called \textit{blocks}. Intuitively we want the "best" blocks. This notion of best will be defined to be \textit{densest}. The densest black is the block that obtains the latgest influence in proportion to it cardinality. The marginal density of a block $(x,B)$ in respect to 
+$$D_T(B)=f_T(B)/(1+|B|)$$ where the $+1$ comes from the fact that the parent of the block (the node associated to it in $X$) also must be added to the selected set.
+
+ A variation of the last algorithm is to search, for each node in $X$, the densest $\varepsilon$ block of its neighbor. In each iteration, the densest $\varepsilon$ blocks of neighbors is added to the result set (with the parent node). This algorithm gives a $(1-1/e-\varepsilon)$ approximation.
+
+
+\subsubsection{adaptivity gap}
+In the stocastic version the solution is adaptive. Since adaptive solution are hard to compute, non-adaptive policy will approximate the adaptive solution.
+ 
+The gap between adaptive and non-adaptive policy is $(1-\varepsilon)$, and the gap is tight. Reminder: if the non-daptive policies must select at most $k$ nodes the gap is unbounded, thus we use a relaxed version on non-adaptive, random-and-relaxed, that allows to choose $k$ elements in expectation. We will only add the tightness proof, due to lack of space.
+\textfb{tight (1-$\varepsilon$ adaptivity gap)}
+Consider the instance where $X$ is a single node, connected to $n=1/\delta^2$ nodes with probability $\delta>0$
+The influence function will be $f(T)=0$ if $T=\emptyset$, else $f(T)=1$, the budget is $k=2$.
+The adaptive policy will choose the node in $X$, wait for the realization, and with probability $1$ at least one node will realize - hence the adaptive policy will obtain $1$. The best non-adaptive policy is to again seed $X$ and the use the rest of the budget in $1/\delta$ nodes in $\mathcal{N}(X)$. The expected utility will be $$1-(1-\delta)^{1/\delta}\approx 1-1/e$$
+
+\subsubsection{stochastic version}
+In the non-stochastic version we described an algorithm that gives a $(1-1/e-\varepsilon)$ approximation. In that algorithm we used an approximation of the densest set of neighbors with $\varepsilon$ block, and got  $(1-1/e-\varepsilon)$ approximation. In the stochastic version we can choose blocks of nodes with some probability and use the same solution, but the main issue is to find the densest $\varepsilon$ blocks.
+We first assume that some blackbox FindOptimalNonAdaptiveBlock can $\alpha$-approximate the densest $\varepsilon$ blocks.
+
+
+\IncMargin{2em}
+\begin{algorithm}[h]
+	\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+	\LinesNumbered
+	\SetKwFunction{FindBestMatch}{FindBestMatch}
+	\Input{$f:2^{\mathcal{N}(X)}\rightarrow \mathbb{R}_+$, budget $k$}
+	\Output{(S,T)} \BlankLine
+	
+	\While{$\exists \;e \in S_1 \cup S_2 \text{ s.t. } e.matched = False$}
+	\Do{\label{line:loopmatch}
+		$(e_1, e_2) = BestMatch(S_1, S_2)$\;\label{line:BestMatch}
+		$match \gets match \cup \{(e_1, e_2)\}$\;\label{line:add}
+		$e_i.matched \gets True$ for $i=1,2$\;\label{line:true}
+	}
+
+	\Return $(S,T)$\; \label{line:bgp}
+	\caption{NonAdaptiveGreedy}\label{algo:genPair}
+\end{algorithm}\DecMargin{1em}
+
+
+\begin{example}\label{ex:geedyPair}

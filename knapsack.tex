@@ -1,0 +1,31 @@
+%!TEX root = main.tex
+\subsection{Approximation algorithm for the Knapsack problem}\label{sec:knapsack}
+In this section we will discuss the approximation algorithm presented in [second paper] for an adaptive policy that gives a constant factor $ (\approx 0.0259)$ approximation for the optimal solution that can be found in polynomial time. The section is composed from two parts: in the first part, we will present an optimal non-adaptive approximation algorithm (which is also relaxed and randomized) and in the second part we will present an approximation algorithm for the optimal adaptive policy, which uses the non-adaptive algorithm.
+\subsubsection{An Optimal Non-Adaptive Approximation Algorithm}
+In this algorithm we will use the notion of \textit{densities} and \textit{marginal density}, therefore, we will begin with some definitions:
+\\The \textit{marginal value} of some policy $(H, r)$ to an existing policy $(S, q)$ is denoted by $F_{(S,q)}(H, r)$ and defined as $F_{(S,q)}(H, r) = F(S \cup H, q \vee r) − F(S, q)$. Similarly, the marginal cost is $C_{(S,q)}(H, r) = C(S \cup H, q \vee r) − C(S, q)$. The marginal density of a policy is given by: 
+\[
+    D_{S,q}(H, r) = 
+\begin{cases}
+    \frac{F_{S,q}(H, r)}{C_{S,q}(H, r)}& \text{if } (S, q) \neq (H, r)\\
+    0              & \text{otherwise}
+\end{cases}
+\]
+
+Finally, $w$ denotes the expected costs vector, defined as the element-wise multiplication of c and p (i.e. the costs and probabilities of the model).
+
+The algorithm considers groups of $\frac{1}{\epsilon}$ nodes from $X$ and greedily adds $x \in X$ to $S$ as long as there is enough budget left while updating $q$ in a way that maximizes the \textbf{density} of $(S,q)$. The update of the probabilities vector $q$ of $N(X)$ finds an approximately densent addition of first-stage node $x \in X$.  For each $x$, it greedily adds the second-stage neighbors of $x$ that maximize the marginal density, until either the budget is exhausted or until the marginal density can no longer be improved.  In the end it chooses the completed solution which has the maximum value (out of the groups of size $\frac{1}{\epsilon}$ it began with). pseudo-code of the algorithm can be found in [???add pics?] divided to the main algorithm \textbf{DensestAscent} and a procedure \textbf{AddDensest}. 
+\begin{figure}[h]
+\includegraphics[width=8cm]{KSDA.PNG}
+\centering
+\end{figure}
+\begin{figure}[h]
+\includegraphics[width=8cm]{KSAD.PNG}
+\centering
+\end{figure}
+It can be proven that \textbf{AddDensest} returns a $(1 - 1/e)$-approximation to the maximal marginal density. This approximation can be translated to a $(1 - 1/e^{1 - 1/e} - \epsilon)$-approximation guarantee for \textbf{DensestAscent} and overcoming the knapsack constrains complication by considering the fact that we tested all subsets $S \subseteq X$ of size $1/\epsilon$. It can be shown that for an optimal solution $(O, v)$ \textbf{DensestAscent} returns $(S, q)$ such that $F(S, q) \ge (1 − 1/e^{1−1/e})(1 − \epsilon)F(O, v)$ and by that proving the following theorem: 
+\begin{theorem} For any constant $\epsilon > 0$, \textbf{DensestAscent} is a $(1 - 1/e^{1 - 1/e} - O(\epsilon))$-approximation algorithm of the optimal non-adaptive policy for general submodular functions.
+\end{theorem}
+
+\subsubsection{Adaptive Policies}
+\input{additiveKnapsack}

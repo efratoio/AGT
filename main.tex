@@ -1,0 +1,249 @@
+%! TEX program = xelatex
+\documentclass[tikz,dvipsnames]{vldb}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{epstopdf}
+\usepackage{multicol}
+\usepackage{caption}
+\usepackage[vlined,ruled,commentsnumbered]{algorithm2e}
+\SetKwRepeat{Do}{do}{while}
+% \usepackage{tikz-qtree,tikz-qtree-compat}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric} % required for the ellipse shape
+\usetikzlibrary{arrows, backgrounds, calc, hobby, positioning,chains,fit,shapes}
+% \usetikzlibrary{positioning,chains,fit,shapes,calc,shadows,arrows}
+% \usepackage{geometry}
+
+\usepackage{caption}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{subcaption}
+
+\usetikzlibrary{shapes.geometric} % required for the ellipse shape
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{calc,trees,positioning,arrows,fit,shapes,calc}
+\tikzset{vertex style/.style={
+    draw=#1,
+    thick,
+    fill=#1!70,
+    text=black,
+    ellipse,
+    minimum width=.1pt,%0.1cm,
+    minimum height=0.5cm,
+    font=\small,
+    outer sep=1pt,
+  },
+  text style/.style={
+    sloped,
+    text=black,
+    font=\footnotesize,
+    above,
+    align=center
+  }
+}
+
+%\usepackage{tikz}
+\tikzset{every tree node/.style={align=center, anchor=north}}
+\definecolor{myblue}{RGB}{80,80,160}
+\definecolor{mygreen}{RGB}{80,160,80}
+%multi-row
+\usepackage{multirow}
+% \usepackage{subfigure}
+\usepackage{subcaption}
+%\usepackage{subfig}
+\usepackage{url}
+\usepackage{array}
+\let\chapter\undefined
+
+%\usepackage[showframe=true]{geometry}
+\usepackage{changepage}
+
+\usepackage{listings}% http://ctan.org/pkg/listings
+\lstset{
+  basicstyle=\ttfamily,
+  %basicstyle=\fontfamily{lmvtt}\selectfont
+  mathescape
+}
+
+\def\ojoin{\setbox0=\hbox{$\bowtie$}%
+	\rule[-.02ex]{.25em}{.4pt}\llap{\rule[\ht0]{.25em}{.4pt}}}
+\def\leftouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie}}
+\def\rightouterjoin{\mathbin{\bowtie\mkern-5.8mu\ojoin}}
+\def\fullouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie\mkern-5.8mu\ojoin}}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+%\usepackage{subcaption}
+
+\captionsetup{skip=0pt}
+%\DeclareCaptionType{copyrightbox}
+
+
+\newcommand{\reminderb}[1]{\textcolor{blue}{[[[#1]]]}}
+\newcommand{\tbd}[1]{TBD: #1}
+\newcommand{\reminder}[1]{\textcolor{red}{[[[#1]]]}}
+\newcommand{\daniel}[1]{\reminder{\bf (Daniel)~#1}{\typeout{#1}}}
+\newcommand{\nave}[1]{\reminder{\bf (Efrat)~#1}{\typeout{#1}}}
+\newcommand{\amir}[1]{\reminderb{\bf (Amir)~#1}{\typeout{#1}}}
+
+%\newcommand{\daniel}[1]{}
+%\newcommand{\amir}[1]{}
+%\newcommand{\nave}[1]{}
+
+\newcommand{\bbB}{\ensuremath{\mathbb{B}}}
+\newcommand{\bbS}{\ensuremath{\mathbb{S}}}
+\newcommand{\bbD}{\ensuremath{\mathbb{D}}}
+\newcommand{\bbN}{\ensuremath{\mathbb{N}}}
+\newcommand{\bbZ}{\ensuremath{\mathbb{Z}}}
+\newcommand{\bbR}{\ensuremath{\mathbb{R}}}
+\newcommand{\BX}{\ensuremath{\bbB[X]}}
+\newcommand{\NX}{\ensuremath{\bbN[X]}}
+\newcommand{\NXD}{\ensuremath{\bbN[D]}}
+\newcommand{\ZX}{\ensuremath{\bbZ[X]}}
+\newcommand{\ND}{\ensuremath{\bbN[D]}}
+%\newcommand{\Dom}{\mbox{$\mathbb{D}$}}
+%\newcommand{\Bool}{\mbox{$\mathbb{B}$}}
+\newcommand{\Real}{\mbox{$\mathbb{R}$}}
+%\newcommand{\Nat}{\mbox{$\mathbb{N}$}}
+%\newcommand{\tinyNat}{\mbox{\tiny $\mathbb{N}$}}
+%\newcommand{\scrNat}{\mbox{\scriptsize $\mathbb{N}$}}
+%\newcommand{\scrBool}{\mbox{\scriptsize $\mathbb{B}$}}
+%\newcommand{\Natinf}{\Nat^{\infty}}
+\newcommand{\Realinf}{\Real^{\infty}}
+\newcommand{\Realpminf}{\Real^{\pm\infty}}
+
+\newcommand{\ssum}{\mbox{$\sum\,$}}
+\newcommand{\notimes}{\mbox{$\otimes\:$}}
+\newcommand{\sM}{\!_M}
+\newcommand{\sL}{\!_L}
+\newcommand{\sK}{\!_K}
+\newcommand{\sH}{\!_H}
+\newcommand{\sKprime}{\!_{K'}}
+\newcommand{\sLprime}{\!_{L'}}
+\newcommand{\sbbN}{\!_\bbN}
+\newcommand{\sbbB}{\!_\bbB}
+\newcommand{\sbbZ}{\!_\bbZ}
+\newcommand{\sN}{\!_N}
+\newcommand{\sW}{\!_W}
+\newcommand{\sKM}{\!_{K\!\otimes\!M}}
+\newcommand{\sKL}{\!_{K\!\otimes\!L}}
+\newcommand{\sSS}{\!_{\bbS}}
+\newcommand{\supp}{\mbox{supp}}
+\newcommand{\Tuples}[2]{#2^{#1}}
+\newcommand{\sAbst}{\!_{ab}}
+
+
+\newcommand{\systemName}{{\tt SpaIrBP}} %sparql inference by provenance 
+\newcommand{\union}{{\tt UNION}}
+\newcommand{\sprql}{{\tt SPARQL}}
+
+\newcommand{\trio}{Trio(X)}
+\newcommand{\lin}{Lin(X)}
+\newcommand{\why}{Why(X)}
+\newcommand{\trioExample}{Trio-example}
+\newcommand{\posBoolExample}{PosBool-example}
+
+\newcommand{\trans}{{parse-to-query-mapping}}
+\newcommand{\parse}{{parse-to-prov-mapping}}
+
+\newcommand{\problemname}{\tt TOP-K}
+\newcommand\mycommfont[1]{\footnotesize\ttfamily{#1}}
+\newcommand\twoheaduparrow{\mathrel{\rotatebox{90}{$\twoheadrightarrow$}}}
+\newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{note}[theorem]{Note}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\tup}[1]{\mathbf{#1}}
+ \makeatletter
+  \let\@copyrightspace\relax
+  \makeatother
+
+
+
+\let\OLDthebibliography\thebibliography
+\renewcommand\thebibliography[1]{
+  \OLDthebibliography{#1}
+  \setlength{\parskip}{0pt}
+  \setlength{\itemsep}{0pt plus 0.3ex}
+}
+
+%definition of proof sketch
+\makeatletter
+\DeclareRobustCommand{\qed}{%
+  \ifmmode % if math mode, assume display: omit penalty etc.
+  \else \leavevmode\unskip\penalty9999 \hbox{}\nobreak\hfill
+  \fi
+  \quad\hbox{\qedsymbol}}
+\newcommand{\openbox}{\leavevmode
+  \hbox to.77778em{%
+  \hfil\vrule
+  \vbox to.675em{\hrule width.6em\vfil\hrule}%
+  \vrule\hfil}}
+\newcommand{\qedsymbol}{\openbox}
+\newenvironment{proofsketch}[1][\proofname]{\par
+  \normalfont
+  \topsep6\p@\@plus6\p@ \trivlist
+  \item[\hskip\labelsep\itshape
+    #1.]\ignorespaces
+}{%
+  \qed\endtrivlist
+}
+\newcommand{\proofname}{Proof Sketch}
+\makeatother
+%end definition of proof sketch
+
+\SetAlFnt{\small}
+
+\usepackage[pdfborder={0 0 0}, plainpages, pdfpagelabels=false, pdfstartview=FitH]{hyperref}
+\usepackage{paralist}
+\begin{document}
+\title{Adaptive Seeding in Social Networks}
+\author{Efrat,Lotan,Naama}
+%\author{Daniel Deutch, Nave Frost, Amir Gilad \\ Tel Aviv University}
+
+
+%\affil{Computer Science Department, Tel Aviv University} \\
+
+\maketitle
+
+%\begin{abstract}
+
+
+%\end{abstract}
+
+
+
+
+\vspace{-1mm}
+% \input{intro}
+% \input{framework}
+\input{intro}
+\input{prelim}
+\input{models}
+\input{results}
+
+
+\bibliographystyle{abbrv}
+{\small
+\bibliography{bibShort}
+}
+%\newpage
+%\appendix
+%\input{letter}
+
+
+
+\end{document}

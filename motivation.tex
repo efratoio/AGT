@@ -1,0 +1,105 @@
+\subsection{motivation for social seeding}
+
+
+
+Influence maximization refers to the field of study of the various algorithmic
+ approaches for selecting a group of early adopters of some product or idea,
+ in a way that will result in a large cascade in the social network.
+ It was first formulated by Domingos and Richardson in 2001 and later developed
+
+
+
+
+Two major issues with the influence maximization model motivated Singer
+ in 20XX [] to come up with a somewhat different approach to the problem.
+ The first problem was narrowing down to a limited core sample of users
+ in practice.
+ For example, in marketing applications merchants can only access users
+ who engaged with the brand somehow in the past.
+ In other cases, profile-based targeting can bring to a significant reduction
+ in the size of the targeted group.
+ From these reasons and others, one often ends up applying the methods on
+ a small core sample of the users, therefore decreasing the chance of having
+ influential users among them.
+ Without influential users in the sample, influence maximization techniques
+ are likely to result in poor outcomes.
+ Since the heavy-tailed degree distribution of social network, in a small
+ random sample there is low probability to find high degree nodes, and since
+ many of the influence maximization techniques rely on selecting such nodes,
+ application of these methods tends to be ineffective when applied to a
+ small core set of users.
+
+The second issue with the influence maximization mechanism is its underlying
+ assumption that nodes that receive an incentive forward the information
+ with probability 1, whereas nodes who do not receive an incentive forward
+ the information with probability determined by the according to the diffusion
+ model.
+
+In an attempt of better suiting the above mentioned challenges, the adaptive
+ seeding model was formed.
+ Instead of spending all the budget on a subgroup of nodes from the available
+ (and often small) core set, only a part of the budget is spent on them
+ in the first stage, and in the second stage the remaining part is spent
+ on their influential friends, who hopefully have arrived.
+ In other words, adaptive seeding aims to recruit influential neighbors
+ to forward become early adopters by allocating a part of the budget for
+ that purpose, as opposed to influencing them to forward the information
+ without incentives.
+
+\subsection{The friendship paradox}
+
+
+The fundamental premise of the adaptive seeding model is that the friends
+ of the core set are more influential than the set itself, an empirical
+ phenomena first discovered in 1991 [Feld 1991].
+ This premise, if correct, justifies the adaptive seeding model's two stage
+ approach.
+ The friendship paradox states that the degree of a node is bounded from
+ above by the average degree of its neighbors, with constant probability.
+ In Feld's paper from 1991, he provides a simple analysis that gives a strong
+ intuition to the validity of the paradox, by showing a bound on the expected
+ degree of a node against the expected degree of a random neighbor in the
+ graph.
+
+However, this does not suffice to establish the friendship paradox.
+ In [], Singer shows how to construct examples in which Feld's intuition
+ holds, but the friendship paradox does not.
+
+In 2015, Lattanzi and Singer proved that the friendship paradox holds for
+ small samples in power-law perturbed graphs.
+ 
+\begin{definition}[Power law]
+Power law graph is a social network graph in which the probability to observe a node
+ with degree i is proportional to $i^{-\beta}$, for a constant $\beta$.
+
+\end{definition}
+
+\begin{definition}[perturbed power law graph]
+
+ Given a graph G whose degree distribution is power law and some $p\in [0,1]$, its \textbf{perturbed power law graph} G(p) is the graph G where every one of the edges in G is rewired with probability $p$.
+\end{definition}
+
+\begin{theoreme}
+
+ For any perturbed power-law graph, with constant probability there is an
+ asymptotic gap between the average degree of a random set of polylogarithmic
+ size and the average degree of its set of neighbors.
+ [Lattanzi and Singer 2015]
+\end{theoreme}
+
+
+Since many classes of social network graphs are contained in the perturbed
+ power-law family, this last result lays out a firm base to the adaptive
+ seeding algorithmic approach.
+ By favoring the adaptive seeing two-stage approach over the traditional
+ influence maximization approach, the expected number of nodes influenced
+ can be asymptotically larger.
+
+
+
+[if we want we can add a really nice sketch that demonstrates the friendship
+ influence in a perturbed power law graph and a non perturbed power law
+ graph - gives great intuition]
+
+
+

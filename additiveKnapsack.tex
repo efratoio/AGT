@@ -1,0 +1,17 @@
+%!TEX root = main.tex
+\subsubsection{Additive Functions for the Knapsack Problem}\label{sec:additiveKnapsack}
+In this section we will show how to solve the problem under knapsack constrains for the case that the influence function is additive, i.e. $f(T) = \sum_{i\in T}{f(i)}$. The approach is to solve directly the adaptive case, and we will get $(1-1/e)$-approximation, which is optimal.
+
+First, let's consider a relaxation of the problem:
+\[H_{R,B_2}=\max_{q} \sum_{i=1}^{n}{v_i q_i} \]
+\[\textup{s.t.}\quad  \sum_{i=1}^{n}{c_i q_i} \le B \]
+\[\quad q \in [0,1]^n \]
+Where $R$ are the realized nodes from $N(X)$ and $B_2 \in [0,B]$ is the budget left for the second stage.
+This is a monotone submodular function for any realization $R \in N(X)$ and every any budget $B_2 \in [0,B]$. Hence, the function $H_{B_2}(S) = \sum_R{p_R H_{R,B2}(S)}$ is also monotone submodular, since submodular functions are closed under addition. For every set $S$ we can evaluate $H_{B_2}(S)$ to within any desired accuracy by sampling. Thus, it can be solved by the algorithm from [refernece "A note on maximizing a submodular set function subject to a
+knapsack constraint"] to a $1-1/e - \epsilon$-approximation solution to every value of $B_2$. 
+\begin{lemma}
+For any $\epsilon > 0$ and any $0 < B_2 < B$ there is a $(1 - 1/e - \epsilon)$ approximation algorithm for:
+\[ max_S \{H_{B_2} : S \subseteq S ; c(S) + B_2 \le B\}\]
+\end{lemma}
+We now show that given a solution to this problem with $B_2$ we have an adaptive policy with a loss of at most $max\{1/2, 1 - \delta_{B_2}\}$ where $\delta_{B_2}$ is the ratio of the highest cost of any second stage element and $B_2$. Without loss of generality an optimal fractional solution has only one fractional entry. Thus we can get at least half the value by taking either only the element associated with the fractional entry or taking all the other elements in the solution. Moreover, by the linearity of the function we know that the contribution of that element to the value of the solution can’t be more than $(1 - \delta_{B_2})$ of the solution’s value and thus by removing it we get an integral solution of value $(1 - \delta_{B_2})$ of the fractional solution in each realization. So we use the same set $S$ returned by the algorithm but restrict the second stage to using only integral solutions, then in all the realizations there is an integral solution of
+value at least $max\{1/2, 1 - \delta_{B_2}\}$ of the optimal fractional solution. Thus, the adaptive policy gets at least $max\{1/2, 1 - \delta_{B_2}\}$ of the value of $H_{B_2}(S)$.
