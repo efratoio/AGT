@@ -1,14 +1,15 @@
 %!TEX root = main.tex
-\subsection{submodular}\label{sec:sub}
+\subsection{Adaptive Seeding for Monotone Submodular Functions}\label{sec:sub}
 In 2013 it was already shown that function in the triggering model, a class of monotone submodular function, can be adaptively seeded \cite{seeman2013adaptive}. However, there are other types of models of submodular functions used to describe influence in networks. In 2015 \cite{badanidiyuru2016locally} an algorithm was suggested to handle the entire class of submodular functions.
 
 \subsubsection{outline}
 We will see that the non-adaptive scenario approximates well, by using dense blocks - i.e. sets of neighbors that there contribution for the (marginal) influence is large, in porportion to their cardinality. We then note that, if approximation of this dense block can be obtained in the adaptive scenario - we can get good approximation. 	
 
 \subsubsection{Notations}
-\textbf{adaptive model} Given a set of nodes $X\subseteq V$ and their set of neighbors $\mathcal{N}(X)$ each associated with probability $p_i$, a budget $k\in\mathb{N}$ and an influence function $f:2^{\mathcal{N}(X)}\rightarrow \mathbb{R}$, we would like to find a set $S\subseteq X$, that will cause it's neighbors to materialize with probability $p_i$, thus allowing to select yet $k-|S|$-elements set $T$ from the realized nodes that will maximize $f(T)$.
+\textbf{adaptive model} Given a set of nodes $X\subseteq V$ and their set of neighbors 
+$\mathcal{N}(X)$ each associated with probability $p_i$, a budget $k\in\mathbb{N}$ and an influence function $f:2^{\mathcal{N}(X)}\rightarrow \mathbb{R}$, we would like to find a set $S\subseteq X$, that will cause it's neighbors to materialize with probability $p_i$, thus allowing to select yet $k-|S|$-elements set $T$ from the realized nodes that will maximize $f(T)$.
 \textbf{submodularity}
-We will define the function $$f_T(A):=f(T\cup A)$$, since it captures the notion of marginal value with respect to sime set already selected.
+We will define the function $$f_T(A):=f(T\cup A)$$, since it captures the notion of marginal value with respect to same set already selected.
  
 \subsubsection{non-stochastic version}
 In order to understand the intuition behind the algorithm, we will first describe a non-stochastic model of the influence maximization problem. In this version, again we have a set $X\subset V$ of nodes that we can activate, and in this version the nodes neighbors will be activated with probability one. We want to choose a set $T\subseteq S$ of cardinality $t\le k$, and then $k-t$ elements of $\mathcal{N}(T)$, that will maximize the influence function. 
@@ -22,14 +23,21 @@ At least $k/2$ of the nodes we chose gave the best marginal, and since the optim
 From the friendship paradox we can assume that the more influencial nodes will be in $\mathcal{N}(X)$, so we would like to select more nodes from the neighbors of $X$. Set of neighbors and the node from $X$ connected to them will be called \textit{blocks}. Intuitively we want the "best" blocks. This notion of best will be defined to be \textit{densest}. The densest black is the block that obtains the latgest influence in proportion to it cardinality. The marginal density of a block $(x,B)$ in respect to 
 $$D_T(B)=f_T(B)/(1+|B|)$$ where the $+1$ comes from the fact that the parent of the block (the node associated to it in $X$) also must be added to the selected set.
 
- A variation of the last algorithm is to search, for each node in $X$, the densest $\varepsilon$ block of its neighbor. In each iteration, the densest $\varepsilon$ blocks of neighbors is added to the result set (with the parent node). This algorithm gives a $(1-1/e-\varepsilon)$ approximation.
-
+ A variation of the last algorithm is to search, for each node in $X$, the densest $\varepsilon$ block of its neighbor. In each iteration, the densest $\varepsilon$ blocks of neighbors is added to the result set (with the parent node). This is similar to the greedy algorithm, but here we can only search $\varepsilon$-blocks.
+For every optimal set that is smaller then $1/\varepsilon$ the algorithm will find it. For every set that is larger then $1/\varepsilon$ then the $\varepsilon$ best block is a $(1-\varepsilon)$ approximation to the best set.If $O$ is the best set and $|O|>1/\varepsilon$ then:
+$$\frac{f_T(B)}{1+|B|}\ge (\frac{1}{1+1/\varepsilon})\frac{1/\varepsilon}{|O|}f_T{O}$$
+from submodularity we know that the most beneficial elements in the set are more beneficial than the rest.
+Now:
+$$(\frac{1}{1+1/\varepsilon})\frac{1/\varepsilon}{|O|}f_T{O}=(\frac{1}{1+\varepsilon})\frac{f
+_T(O)}{|O|}\ge (1-\varepsilon)\frac{f_T(O)}{1+|O|}$$
+ This algorithm gives a $(1-1/e-\varepsilon)$ approximation.
+\efrat{why}
 
 \subsubsection{adaptivity gap}
-In the stocastic version the solution is adaptive. Since adaptive solution are hard to compute, non-adaptive policy will approximate the adaptive solution.
+In the stochastic version the solution is adaptive. Since adaptive solution are hard to compute, non-adaptive policy will approximate the adaptive solution.
  
-The gap between adaptive and non-adaptive policy is $(1-\varepsilon)$, and the gap is tight. Reminder: if the non-daptive policies must select at most $k$ nodes the gap is unbounded, thus we use a relaxed version on non-adaptive, random-and-relaxed, that allows to choose $k$ elements in expectation. We will only add the tightness proof, due to lack of space.
-\textfb{tight (1-$\varepsilon$ adaptivity gap)}
+The gap between adaptive and non-adaptive policy is $(1-\varepsilon)$, and the gap is tight. Reminder: if the non-adaptive policies must select at most $k$ nodes the gap is unbounded, thus we use a relaxed version on non-adaptive, random-and-relaxed, that allows to choose $k$ elements in expectation. We will only add the tightness proof, due to lack of space.
+\textbf{tight (1-$\varepsilon$ adaptivity gap)}
 Consider the instance where $X$ is a single node, connected to $n=1/\delta^2$ nodes with probability $\delta>0$
 The influence function will be $f(T)=0$ if $T=\emptyset$, else $f(T)=1$, the budget is $k=2$.
 The adaptive policy will choose the node in $X$, wait for the realization, and with probability $1$ at least one node will realize - hence the adaptive policy will obtain $1$. The best non-adaptive policy is to again seed $X$ and the use the rest of the budget in $1/\delta$ nodes in $\mathcal{N}(X)$. The expected utility will be $$1-(1-\delta)^{1/\delta}\approx 1-1/e$$
@@ -57,7 +65,82 @@ We first assume that some blackbox FindOptimalNonAdaptiveBlock can $\alpha$-appr
 \end{algorithm}\DecMargin{1em}
 
 \begin{lemma} \label{lemma:approxEpsilon}
-$\forall \varepsilon >0$, assume that in every iteration FindOptimalNonAdaptiveBlock returns a block which is an $\alpha$ approximation to the optimal $\varepsilon$-block. Then, when $k=\Omega(1/\varepsilon^2) algorithm \ref{algo:nonAda} returns a solution $(S,T)$ s..t. $F(T)\ge (1-1/e^{\alpha}-O(\varepsilon))OPT_{NA}$
+$\forall \varepsilon >0$, assume that in every iteration FindOptimalNonAdaptiveBlock returns 
+a block which is an $\alpha$ approximation to the optimal $\varepsilon$-block. Then, when $k=\Omega(1/\varepsilon^2)$ algorithm \ref{algo:nonAda} returns a solution $(S,T)$ s..t. $F(T)\ge (1-1/e^{\alpha}-O(\varepsilon))OPT_{NA}$
 \end{lemma}
 
 Lemma \ref{lemma:approxEpsilon} shows that we can adaptively seed submodular function,  if we could approximate densest $\varepsilon$ blocks (in polynomial time). 
+
+Firstly we will define the marginal influence function for some set $T$ as we defined it for the non stochastic case $f_T$.
+
+reminder: $R_i$ are the realizations of the network graphs in the second stage
+
+$$F_T(B):=\sum_{i\in [m]}{p(R_i)(f((T\cup B)\cap R_i)-f(T\cap R_i))}$$
+
+This is the expected influence on the realized graphs.
+Since the proof is long, we will omit it, but provide a proof of one of the claims:
+\begin{claim}
+It is easy to show that similarly to the non stochastic case, the best $\varepsilon$-block is a $(1-2\varepsilon)$ approximation to the densest block. 
+\end{claim}
+
+\begin{proof}
+
+reminder: $C(B)=\sum_{e\in B}p_e$. For all blocks $C(B)<1\varepsilon$ (expected cardinality of the block), then the optimal $\varepsilon$ block has at least the same marginal density.
+Otherwise $B>1/\varepsilon$.
+Define $B_{\varepsilon}$ be the elements in $B$ with highest marginal value s.t. $C(B_{\varepsilon})\le 1/\varepsilon$
+$$\frac{F_{T_j}(B_O)}{1+C(B_O)}\ge\frac{F_{T_j}(B_{\varepsilon})}{1+C(B_{\varepsilon})}$$
+because $B_{\varepsilon}$ is one of the candidates of $B_O$
+$$\frac{F_{T_j}(B_{\varepsilon})}{1+C(B_{\varepsilon})}\le \frac{\frac{1/\varepsilon-1}{C(B)}F_{T_j}(B)}{1+1/\varepsilon)}$$
+
+$B_{\varepsilon}$ is at least the size of $1/\varepsilon-1$ \efrat{why} and at most $\varepsilon$ and from submodularity we get the inequality.
+
+$$\frac{\frac{1/\varepsilon-1}{C(B)}F_{T_j}(B)}{1+1/\varepsilon)}\ge
+ \frac{1-\varepsilon}{1+\varepsilon}\frac{F_{T_j}(B)}{C(B)}\ge(1-2\varepsilon)\frac{F_{T_j}(B)}{1+C(B)}$$
+
+\end{proof}
+
+Is it possible to approximate optimal $\varepsilon$ blocks?
+
+\subsubsection{Special Cases}
+For some special cases it is possible to find approximations in poly-time
+\textbf{large probabilities}
+If all the probabilities on nodes are larger then some constant $\delta >0$. The intuition is that it is now  easier to enumerate all set $<1/\varepsilon$, thus finding the optimal block.
+
+\textbf{small probabilities} in this case enumerating is infeasible. We will define a new fundamental problem.
+
+\begin{definition}[Submodular Optimization with Small Probabilities-{\delta}]
+Given a monotone submodular function $f$ and probabilities of each element realizing $p$, $\max_i{p_i}\le \delta$, find a set $T$ with expected size $k$ that maximizes the expected value of $f$
+
+\end{definition} 
+The 
+\begin{theorem}
+If $f$ can be represented as a MRS function, then there exists a $(1-\delta/2)$-approximation algorithm for SOSP-$\delta$ using convex programming 
+\end{theorem}
+
+\subsubsection{Hardness of Approximating Optimal epsilon-block for General Submodular Functions}
+The problem of SOSP has a reduction to planted clique problem
+\subsubsection{Approximation via epsilon-locally-adaptive Policies}
+\begin{theorem}
+For every constant $\varepsilon>0$ there is an algorithm that runs in poly-time and returns an adaptive policy which is a $((1-1/e)^2-\varepsilon)$-approximation to the optimal adaptive policy with general monotone submodular functions. 
+\end{theorem}
+\begin{definition}
+An adaptive $\varepsilon$ block is a set $S\subseteq X$ of size at most $1/\varepsilon^2$ and for each realization $R_i$ a set $T_i\subseteq\mathcal{N}(S)\cap R_i$ of size at most $2/\varepsilon$. The cost of a block $B$ is $C(B)=|S|+\max_i{|T_i|}$. An $\varepsilon$ adaptive policy is a set $\beta$ of $\varepsilon$ adaptive blocks
+\end{definition}
+
+\IncMargin{2em}
+\begin{algorithm}[h]
+	\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+	\LinesNumbered
+	\SetKwFunction{FindBestMatch}{FindBestMatch}
+	\Input{budget $k,\varepsilon$}
+	$\beta\gets\emptyset$ 
+	\While{$C(B)<k-\frac{3}{\varepsilon^2}$}
+	{
+		$\beta\gets \beta\cup$ FindOptimalAdaptiveBlock$(\beta,\varepsilon)$
+	}
+
+	\Return $\beta$
+	\caption{LocallyAdaptiveGreedy}\label{algo:local}
+\end{algorithm}\DecMargin{1em}
+
+

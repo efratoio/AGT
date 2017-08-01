@@ -69,11 +69,6 @@
   mathescape
 }
 
-\def\ojoin{\setbox0=\hbox{$\bowtie$}%
-	\rule[-.02ex]{.25em}{.4pt}\llap{\rule[\ht0]{.25em}{.4pt}}}
-\def\leftouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie}}
-\def\rightouterjoin{\mathbin{\bowtie\mkern-5.8mu\ojoin}}
-\def\fullouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie\mkern-5.8mu\ojoin}}
 
 \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
 %\usepackage{subcaption}
@@ -214,7 +209,7 @@
 \author{Efrat Abramovitz, Naama Boer, Lotan Faygler \\ Tel Aviv University}
 
 
-\affil{Computer Science Department, Tel Aviv University} \\
+% \affil{Computer Science Department, Tel Aviv University} \\
 
 \maketitle
 

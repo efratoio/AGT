@@ -1,0 +1,46 @@
+%!TEX root = main.tex
+\IncMargin{2em}
+\begin{algorithm}[h]
+	\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+	\LinesNumbered
+	\SetKwFunction{FindBestMatch}{FindBestMatch}
+	\Input{$f:2^{\mathcal{N}(X)}\rightarrow \mathbb{R}_+$, budget $B$,$\varepsilon$}
+	$S^*\gets\emptyset$, $q^*\gets 0$ 
+	\For{$S_0\subseteq X,|S_0|\le 1/\varepsilon$}
+	{
+		$S\gets S_0, q\gets 0$
+		While{$C(S,q)<B$}
+		{
+			$(S,q)\gets $\ref{algo:addDense}$(S,q)$
+		}
+		\If{F(S,q)\ge F(S^*,q^*)}
+		\Then{$S^*\gets S,q^*\gets q$}
+		$(x,B)\gets$ FindOptimalNonAdaptiveBlock$(S,T)$
+		$(S,T) = (S\cup x,T\cup B)$
+	}
+
+	\Return $(S^*,q^*)$
+	\caption{DensesetAscent}\label{algo:denseAsc}
+\end{algorithm}\DecMargin{1em}
+
+\IncMargin{2em}
+\begin{algorithm}[h]
+	\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+	\LinesNumbered
+	\SetKwFunction{FindBestMatch}{FindBestMatch}
+	\Input{$f:2^{\mathcal{N}(X)}\rightarrow \mathbb{R}_+$, budget $B$,$\varepsilon$}
+	$S^*\gets\emptyset$, $q^*\gets 0$ 
+	\For{$S_0\subseteq X,|S_0|\le 1/\varepsilon$}
+	{
+		$S\gets S_0, q\gets 0$
+		While{$C(S,q)<B$}
+		{
+			$(S,q)\gets \re$
+		}
+		$(x,B)\gets$ FindOptimalNonAdaptiveBlock$(S,T)$
+		$(S,T) = (S\cup x,T\cup B)$
+	}
+
+	\Return $(S,T)$
+	\caption{AddDensest}\label{algo:addDense}
+\end{algorithm}\DecMargin{1em}
