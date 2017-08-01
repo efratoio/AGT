@@ -108,11 +108,18 @@ If all the probabilities on nodes are larger then some constant $\delta >0$. The
 
 \textbf{small probabilities} in this case enumerating is infeasible. We will define a new fundamental problem.
 
-\begin{definition}[Submodular Optimization with Small Probabilities-{\delta}]
+\begin{definition}[Submodular Optimization with Small Probabilities-{\delta}]\label{def:SOSP}
 Given a monotone submodular function $f$ and probabilities of each element realizing $p$, $\max_i{p_i}\le \delta$, find a set $T$ with expected size $k$ that maximizes the expected value of $f$
 
+
 \end{definition} 
-The 
+This is a new fundamental problem, presented by Badanidiyuru et al. \cite{badanidiyuru2016locally}, that also proves that this problem is hard.
+The problem was reduced to the fractional version - only rational probabilities considered. This is allowed because small values can be easily round to fractional solutions using the \textit{pigage rounding method} with very small loss. \cite{ageev2004pipage}
+This problem can be stated now formally (using the notations in \ref{def:SOSP}:
+$$\max_q{E(f(T))=\sum_T{\prod_{i\in t}{q_i}}\prod_{i\notin T}{(1-q_i)}}f(T)$$
+$$s.t. \sum_i{q_i\le k}$$
+$$q_i\in[0,p_1] \forall i\in[n]$$
+
 \begin{theorem}
 If $f$ can be represented as a MRS function, then there exists a $(1-\delta/2)$-approximation algorithm for SOSP-$\delta$ using convex programming 
 \end{theorem}
