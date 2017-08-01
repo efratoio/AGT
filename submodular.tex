@@ -3,7 +3,7 @@
 In 2013 it was already shown that function in the triggering model, a class of monotone submodular function, can be adaptively seeded \cite{seeman2013adaptive}. However, there are other types of models of submodular functions used to describe influence in networks. In 2015 \cite{badanidiyuru2016locally} an algorithm was suggested to handle the entire class of submodular functions.
 
 \subsubsection{outline}
-We will see that the non-adaptive scenario approximates well, by using dense blocks - i.e. sets of neighbors that there contribution for the (marginal) influence is large, in porportion to their cardinality. We then note that, if approximation of this dense block can be obtained in the adaptive scenario - we can get good approximation. 
+We will see that the non-adaptive scenario approximates well, by using dense blocks - i.e. sets of neighbors that there contribution for the (marginal) influence is large, in porportion to their cardinality. We then note that, if approximation of this dense block can be obtained in the adaptive scenario - we can get good approximation. 	
 
 \subsubsection{Notations}
 \textbf{adaptive model} Given a set of nodes $X\subseteq V$ and their set of neighbors $\mathcal{N}(X)$ each associated with probability $p_i$, a budget $k\in\mathb{N}$ and an influence function $f:2^{\mathcal{N}(X)}\rightarrow \mathbb{R}$, we would like to find a set $S\subseteq X$, that will cause it's neighbors to materialize with probability $p_i$, thus allowing to select yet $k-|S|$-elements set $T$ from the realized nodes that will maximize $f(T)$.

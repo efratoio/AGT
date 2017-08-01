@@ -1,5 +1,5 @@
 %!TEX root = main.tex
-\subsection{Approximation algorithm for the Knapsack problem}\label{sec:knapsack}
+\subsection{Approximation Algorithm for the Knapsack Problem}\label{sec:knapsack}
 In this section we will discuss the approximation algorithm presented in [second paper] for an adaptive policy that gives a constant factor $ (\approx 0.0259)$ approximation for the optimal solution that can be found in polynomial time. The section is composed from two parts: in the first part, we will present an optimal non-adaptive approximation algorithm (which is also relaxed and randomized) and in the second part we will present an approximation algorithm for the optimal adaptive policy, which uses the non-adaptive algorithm.
 \subsubsection{An Optimal Non-Adaptive Approximation Algorithm}
 In this algorithm we will use the notion of \textit{densities} and \textit{marginal density}, therefore, we will begin with some definitions:
@@ -28,4 +28,17 @@ It can be proven that \textbf{AddDensest} returns a $(1 - 1/e)$-approximation to
 \end{theorem}
 
 \subsubsection{Adaptive Policies}
-\input{additiveKnapsack}
+In this section we will present an adaptive policy that is based on the algorithm from the previous section. There are two main points that need to be considered when using a relaxed non adaptive policy as an adaptive one. The first one is that we need to show that a non-adaptive policy (relaxed and randomized) is a good approximation to an adaptive policy. This we can get as a consequence from a Lemma in [A. Badanidiyuru, C. Papadimitriou, A. Rubinstein, L. Seeman, and Y. Singer. Submodular
+adaptive seeding. Manuscript, 2015.]. The lemma proves that the gap is $(1 - 1/e)$, and that it is tight. The second point to be considered is that the objective value we get from the nan-adaptive policy can be approximately obtain over the realizations of the nodes in the second stage. This point is harder to overcome as we need to divide the budget between the first and second stages apriori before the nodes in the second stage are being realized. We will handle it by first solving it with a apecial case, in which the cost of each node is not too high.
+\textbf{small costs}
+In this part we assume that that no node as a cost which is a constant ratio of the total budget. This is a reasonable assumption, as while different nodes can have much different costs, it is very unlikely that a single node will cost a fraction of the total budget. This assumtion makes it possible to convert non-adaptive policies into adaptive ones, with a small loss. We will prove this by using two lemmas (given without proves, proves can be found in[]):
+lemma 5.3, lemma 5.4.
+present theorem 5.2 and prove it.
+\textbf{arbitrarily high costs}
+The main idea for overcoming the obstacle of the two stages nature of the problem with adaptive policy that is based on a non-adaptive policy is to consider the optimal adaptive policy as several restricted policies, where each one of these restrictions can be approximated either by using the non-adaptive relaxation, or through an adaptive policy which can be found using sampling and standard techniques for submodular maximization.
+
+
+
+the two points needed to be considered
+small costs: two lemmas without proofs, theorem 5.2 and proof
+general case: introduction, nice, opttc, opttp, all three 

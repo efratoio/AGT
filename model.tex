@@ -1,12 +1,14 @@
 %!TEX root = main.tex
-\subsection{model}\label{sec:model}
-The adaptive seeding model is a two-stage stochastic optimization framework. We are given a set of nodes {X}, their set of neighbors {N(X)},  each associated with a probability $p_i$, as well as a budget $k \in N$ and a function $f:2^{N(X)} \rightarrow R$.  In the first stage, a set $S \subseteq X$ can be selected, which causes each one of its neighbors to materialize independently with probability $p_i$. In the second stage, the remainder of the budget can be used to optimize the function $f \left( \cdot \right)$ over the realized neighbors. This function quantifies the expected number of individuals in the network that will be influenced as a result of selecting a subset of early adopters. The goal is to select a subset $S \subseteq X$ of size at most $k$ s.t. the function can be optimized in expectation over all possible realizations of its neighbors with the remaining budget $k - \mid S \mid$.
+\subsection{Adaptive Seeding Problem Formulation}\label{sec:model}
+The adaptive seeding model is a two-stage stochastic optimization framework. We are given a set of nodes {X} and their neighbors {N(X)}, each associated with a probability $p_i$. In addition we are given a budget $k \in N$ and a function $f:2^{N(X)} \rightarrow \mathbb{R}$.  In the first stage, a set $S \subseteq X$ can be selected, which causes each one of its neighbors to materialize independently with probability $p_i$. In the second stage, the remainder of the budget can be used to optimize the function $f \left( \cdot \right)$ over the realized neighbors. This function quantifies the expected number of individuals in the network that will be influenced as a result of selecting a subset of early adopters. The goal is to select a subset $S \subseteq X$ of size at most $k$ s.t. the function can be optimized in expectation over all possible realizations of its neighbors with the remaining budget $k - |S|$.
 
 A function is \textit{adaptively seeded} if the adaptive seeding model can be approximated within constant factor.
 
+\lotan{insert in mathematics the adaptive approach}
 
 
-\subsubsection{The Model under Knapsack Constraints}
+\subsubsection{Knapsack Constraints}
 In this variation, the network graph is node-weighted. The goal now is to find a subset of nodes $S \subseteq X$ which can maximize the objective function of the
-second stage, in expectation over all realizations of neighbors of $S$ s.t the cost of the second stage is now $k - c(S)$
+second stage, in expectation over all realizations of neighbors of $S$ s.t the cost of the second stage is now $k - c(S)$. \lotan{improve}
 
+\input{nonAdaptive}

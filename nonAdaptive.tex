@@ -1,0 +1,14 @@
+%!TEX root = main.tex
+\subsubsection{Randomized-and-Relaxed Non-Adaptive Policies}\label{sec:nonAdaptive}
+In order to get an adaptive solution, most of the algorithms use a fractional, non-adaptive relaxation to the problem. A policy is called non adaptive if already in the first stage, before the nodes in the second stage realize, the policy commits on
+both $S \subseteq X$ and $Q \subseteq N(S)$ it will select. The ratio between the expected value of the optimal adaptive policy and the expected value of the optimal non
+adaptive policy is unbounded \cite{seeman2013adaptive}, therefore randomized-and-relaxed
+non adaptive policies are needed. Such policies only commit to the probability they will select each node that appears in the second stage. Such a policy is a set $S \subseteq X$ and a distribution $q$ over $N(S)$ that describes the probability the algorithm will
+select $i \in N(s)$ in the second stage, if it realizes. The optimal randomized-and-relaxed problem can be formulated as following:
+
+\[\max_{S \subseteq X} \sum_{T \subseteq N(X)}{\left(\prod_{i \in T}{p_i q_i}\prod_{i \not\in T}{(1-p_i q_i)}\right)f(T)} \]
+\[\textup{s.t.}\quad  |S|+ \sum_{i \in N(S)}{p_i q_i} \le k \]
+
+While working on a problem with different costs, the budget constraint becomes 
+\[ c(S) + \sum_{i \in N(S)}{c(i)p_i q_i} \leq B \]
+The ratio between an optimal adaptive solution and an optimal randomized-and-relaxed non adaptive one is called the adaptivity gap of the problem.

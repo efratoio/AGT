@@ -1,18 +1,15 @@
 %!TEX root = main.tex
-\subsection{motivation for social seeding}
+\subsection{Motivation for Social Seeding}
 
 
 
 Influence maximization refers to the field of study of the various algorithmic
  approaches for selecting a group of early adopters of some product or idea,
  in a way that will result in a large cascade in the social network.
- It was first formulated by Domingos and Richardson in 2001 and later developed
-
-
-
+ It was first formulated by Domingos and Richardson in 2001 and later developed \naama{add reference}
 
 Two major issues with the influence maximization model motivated Singer
- in 20XX [] to come up with a somewhat different approach to the problem.
+ in 2013 \cite{seeman2013adaptive} to come up with a somewhat different approach to the problem.
  The first problem was narrowing down to a limited core sample of users
  in practice.
  For example, in marketing applications merchants can only access users
@@ -32,8 +29,8 @@ Two major issues with the influence maximization model motivated Singer
 
 The second issue with the influence maximization mechanism is its underlying
  assumption that nodes that receive an incentive forward the information
- with probability 1, whereas nodes who do not receive an incentive forward
- the information with probability determined by the according to the diffusion
+ with probability one, whereas nodes who do not receive an incentive forward
+ the information with probability determine according to the diffusion
  model.
 
 In an attempt of better suiting the above mentioned challenges, the adaptive
@@ -43,16 +40,15 @@ In an attempt of better suiting the above mentioned challenges, the adaptive
  in the first stage, and in the second stage the remaining part is spent
  on their influential friends, who hopefully have arrived.
  In other words, adaptive seeding aims to recruit influential neighbors
- to forward become early adopters by allocating a part of the budget for
+ to become early adopters by allocating a part of the budget for
  that purpose, as opposed to influencing them to forward the information
  without incentives.
 
 \subsection{The friendship paradox}
 
-
 The fundamental premise of the adaptive seeding model is that the friends
- of the core set are more influential than the set itself, an empirical
- phenomena first discovered in 1991 [Feld 1991].
+ of the core set are generally more influential than the set itself, an empirical
+ phenomena first discovered in 1991 \cite{feld1991your}.
  This premise, if correct, justifies the adaptive seeding model's two stage
  approach.
  The friendship paradox states that the degree of a node is bounded from
@@ -63,11 +59,11 @@ The fundamental premise of the adaptive seeding model is that the friends
  graph.
 
 However, this does not suffice to establish the friendship paradox.
- In [], Singer shows how to construct examples in which Feld's intuition
+ In \cite{singer2016influence}, Singer shows how to construct examples in which Feld's intuition
  holds, but the friendship paradox does not.
 
-In 2015, Lattanzi and Singer proved that the friendship paradox holds for
- small samples in power-law perturbed graphs.
+In 2015, Lattanzi and Singer \cite{lattanzi2015power} proved that the friendship paradox holds for
+ small samples in power-law perturbed graphs. 
  
 \begin{definition}[Power law]
 Power law graph is a social network graph in which the probability to observe a node
@@ -85,7 +81,7 @@ Power law graph is a social network graph in which the probability to observe a 
  For any perturbed power-law graph, with constant probability there is an
  asymptotic gap between the average degree of a random set of polylogarithmic
  size and the average degree of its set of neighbors.
- [Lattanzi and Singer 2015]
+\cite{lattanzi2015power}
 \end{theorem}
 
 
@@ -97,7 +93,7 @@ Since many classes of social network graphs are contained in the perturbed
  can be asymptotically larger.
 
 
-
+\naama{insert perturbed}
 [if we want we can add a really nice sketch that demonstrates the friendship
  influence in a perturbed power law graph and a non perturbed power law
  graph - gives great intuition]

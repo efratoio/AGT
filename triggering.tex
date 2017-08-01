@@ -1,0 +1,187 @@
+%!TEX root = main.tex
+\subsection{Triggering Model Results}
+
+Maximizing influence in the Triggering model requires solving an exponential
+number of $NP$-hard problems. The main result of Singer and Seeman
+from 2015 is an algorithm that finds an adaptive policy that is a
+constant factor approximation to the optimal adaptive policy for influence
+functions in the triggering model class\footnote{In the survey Singer mention the same approach with a tighter analysis
+can yield a $(1-1/e)^{2}$ approximation}.
+
+In the paper they lay out the process of their proof in four stages.
+In this part of the survey we are discussing solely objective functions
+in the triggering model, unless stated otherwise. 
+
+
+
+They start by constructing a concave function that approximates the
+objective of the randomized-and-relaxed non adaptive problem. The
+construction converts the objective to a concave relaxation of a succinct
+coverage problem. reminder: The optimal randomized-and-relaxed non
+adaptive policy is the following optimization problem: 
+
+(1) $max\;\sum_{T\subseteq N(S)}(\prod_{\underbar{i\ensuremath{\in}T}}p_{i}q_{i})\prod_{i\notin T}(1-p_{i}q_{i})\,f(T)$
+
+(2) $s.t.$ $S\subseteq X$
+
+(3) $|S|+\sum_{i\in N(S)}p_{i}q_{i}\leq k$
+
+where $q_{i}$ for each $i\in N(S)$ describes the probability the
+algorithm will select $i$ if it realizes, and $p_{i}$is the probability
+$i$ realizes. $\mathcal{F}$ denotes solutions $(S,q)$ that respect
+constraints $(2)$ and $(3)$ in which $q$ has non zero values only
+on nodes in $N(S)$.
+
+The adaptivity gap of the adaptive seeding problem is defined as the
+ratio between an optimal adaptive solution and an optimal randomized-and
+relaxed non adaptive (RRNA) solution. In the second stage, the gap
+is proved to be a constant factor smaller than $(e/(e-1))\backsimeq1.58$,
+so it makes sense to use RRNA to approximate an adaptive policy.
+
+After the adaptivity gap was shown to be bounded by a small constant,
+they lay out a hill-climbing algorithm which approximates the objective.
+The algorithm takes a step towards the densest marginal contribution
+to the concave objective in every iteration.
+
+The proof is completed by showing that every solution to the concave
+relaxation can be converted to an adaptive policy, with only a constant
+loss in the approximation factor.
+
+
+
+\subsubsection{A relaxation of the randomized-and-relaxed objective}
+
+Every realization of the triggering set can be described as a graph
+in which verices $u$, $v$ are connected if and only if $u$ is in
+the triggering set of $v$. Let $G$ be a family of such graphs$G_{i}$,
+and it is easy to see that the influence of a set is the number of
+nodes it can influence in expectation over all realizations in $G$.
+We will denote the number of nodes reachable from a subset $T\subseteq V$
+in a graph $G$ as $f_{G}(T)$. So the influence function can be rewritten
+as: $f(T)=\sum_{G_{i}\in G}p(Gi)f_{Gi}(T)$. For every realization
+$G_{i}$ we want to evaluate the number of nodes covered in expectation
+when selecting nodes with some probability. We will denote the set
+of nodes reachable from $u$ in the realization $G_{i}$ as $C_{i}(u)$.
+We will use the multilinear relaxation of the coverage function in
+$G_{i}$ defined for every $z\in[0,1]^{n}$ as: 
+
+$\hat{f_{G_{i}}}(z)=\sum_{T\subseteq V}\prod_{j\in T}z_{j}\prod_{j\notin T}(1-z_{j})f_{G_{i}}(T)=\sum_{u\in V}1-\prod_{j\in C_{i}(u)}(1-z_{j})$
+
+Let $F(q)=\sum_{G_{i}\in G}p(Gi)\hat{f_{G_{i}}}(p\circ q)$, where
+$p\circ q$ is the vector obtained by element-wise multiplication
+of $p$ and $q$. We can rewrite the objective of equation $(1)$
+in the optimization problem as $max_{F}F(q)$. In addition we define
+$F(q|S)=\begin{cases}
+F(q) & (S,q)\in F\\
+0 & o.w
+\end{cases}$ . $\hat{f_{G_{i}}}(\cdot)$ is not concave, but it is can be approximated
+by a concave function. 
+
+We define $L_{G_{i}}(z)=\sum_{u\in V}min\left\{ 1,\sum_{j\in C_{i}(u)}z_{j}\right\} $,
+and obtain for any $z\in[0,1]^{n}$ that $L_{G_{i}}(z)\geq f_{G_{i}}(z)\geq(1-1/e)L_{G_{i}}(z)$.
+We use $L(q)=\sum_{G_{i}}p(G_{i})L_{G_{i}}(p\circ q)$ to denote the
+concave relaxation of $F$, and $L(q|S)=\sum_{G_{i}}p(G_{i})\sum_{u\in V}min\left\{ 1,\sum_{j\in C_{i}(u)\cap N(S)}p_{j}q_{j}\right\} $for
+$(S,q)\in F$. 
+
+
+Our objective is to optimize $L(\cdot|\cdot)$ over the set $F$.
+In order to avoid summing over potentially exponentially many elements
+in of$G$, we will use a sampled mean of $L$ instead and show it
+provides a good approximation of $L$. Let $\hat{L}(z)=\sum_{G_{i}}p(G_{i})L_{G_{i}}(z)$
+and let$G_{1},\ldots,G_{N}$ be $N$ i.i.d samples of $G$, and $\hat{L_{N}}(z)=\frac{1}{N}\sum_{i=1}^{N}L_{G_{i}}(z)$.
+The following lemma shows that $L(\cdot)$ can be approximated efficiently
+- for any $z\in[0,1]^{n}$ the absolute difference between the values
+of $\hat{L}(z)$ and $\hat{L_{N}}(z)$ is small with high probability. 
+
+\textbf{Lemma.} For all $\beta,\epsilon>0$, all $n\in N$ and all
+$N\geq O(1)\frac{n^{2}}{\epsilon^{2}}[nln(\frac{n^{2}}{\epsilon})+ln(\frac{1}{\beta})]$,
+$\Pr\left\{ sup_{x\in[0,1]^{n}}(|\hat{L}_{N}(x)-\hat{L}(x|)\right\} \leq\beta$.
+
+We use $OPT_{A}$,$OPT_{NA}$ to denote the expected values of the
+optimal adaptive and randomized-and-relaxed non adaptive policies,
+respectively. We use $OPT_{L}$ to denote the optimal solution for
+the $L(\cdot|\cdot)$ function.
+
+\begin{lemma} $OPT_{A}\leq OPT_{L}\leq(e-(e-1))OPT_{NA}$
+\end{lemma}
+
+
+Summing the results obtained so far, we mentioned our goal is to optimize
+$max_{F}F(q)$, which is equivalent to maximizing $F(q|S)$. $\hat{f_{G_{i}}}(\cdot)$
+is not concave, but can be aproximated by $L_{G_{i}}(p\circ q)$ which
+is concave. So instead of maximizing $F(q|S)$ we can maximize $L(q|S)$.
+In order to do that we use $N$ samples of $G$, define $L_{N}(p\circ q)$
+as the sampled mean of $L$ and show that it approximates the function
+$L$ efficiently. Combining this with the results of the adaptivity
+gap, we can conclude that finding a non adaptive policy reduces to
+solving the optimization problem $\max_{F}L(q|S)$.
+
+
+
+We define the \textbf{marginal density} of $(T,r)$ with respect to
+$(S,q)$ to be the ratio between the marginal contribution of adding
+$(T,r)$ to $(S,q)$ and its marginal cost.
+
+The main procedure of the algorithm iteratively seeks for $(x,r')\in F$
+with the largest marginal density that can be added to the current
+solution - and seeds the node $x\in X$ (i.e. adds $x$ to $S$) if
+it hadn\textquoteright t already been seeded.
+
+// picture of the algorithm here
+
+
+
+\subsubsection{adaptivity gap}
+
+We will first prove that $OPT_{A}\leq(e/(e-1)OPT_{NA}$, and in the
+second stage show that the bound is tight. We will prove that $OPT_{A}\leq OPT_{L}$
+and since $(1-1/e)L(q|S)\leq F(q|S)\leq L(q|S)$ for any $(S,q)\in F$
+then we have $OPT_{L}\leq(e/(e-1))OPT_{NA}$and we can conclude that
+$OPT_{A}\leq(e/(e-1)OPT_{NA}$ .
+
+
+
+Whenever $S\subseteq X$ represent the $k-t$ nodes selected by the
+optimal adaptive policy in the first stage and let $R_{1},\ldots,R_{m}$
+be all possible realizations of nodes in $N(S)$. we can denote $OPT_{L(\cdot|S)}$
+as the optimal solution in $L(j)$.
+
+We claim that the optimal adaptive policy represents a feasible solution
+in $L(\cdot|S)$, and that this solution has a higher value in $L(\cdot|S)$
+than the expected value of $OPT_{A}$ . 
+
+The optimal adaptive policy has exactly $t$ nodes allocated inevery
+realization. Let $l=|N(S)|$, and let $\{y_{1},\ldots,y_{l}\}$ be
+the set of all nodes in $N(S)$, and let $\alpha_{i}(y_{j})=\begin{cases}
+p(R_{i}) & \text{if \ensuremath{y_{j}} is allocated in \ensuremath{R_{i}}}\\
+0 & o.w
+\end{cases}$ and $\alpha(y_{j})=\sum_{i=1}^{m}\alpha_{i}(y_{j})$, $p(y_{j})$
+marking the probability that $y_{j}$ is realized. Since $\alpha(y_{j})\leq p(y_{j})$
+and therefore we can write $\alpha(y_{j})=p(y_{j})q_{j}$ for some
+$q_{j}\leq1$. Since the solution is feasible in each realization
+$R_{i}$ we know that $\sum_{j=1}^{l}\alpha_{i}(y_{j})\leq tP(R_{i})$.
+We sum up over all realizations to get: $\sum_{i=1}^{m}\sum_{j=1}^{n}\alpha_{i}(y_{j})\leq t\Longleftrightarrow\sum_{j=1}^{n}\sum_{i=1}^{m}\alpha_{i}(y_{j})\leq t\Longleftrightarrow\sum_{j=1}^{n}\alpha(y_{j})\leq t\Longleftrightarrow\sum_{j=1}^{n}p(y_{j})q_{j}\leq t$.
+This means $(S,q)$ is indeed a feasible solution to $L(\cdot|S)$
+that corresponds with the optimal adaptive policy. 
+
+Now we shall prove that the value of the solution $(S,q)$ yields
+a higher value in $L(\cdot|S)$ than the expected value of $OPT_{A}$. 
+
+Let $u$ be an element in the universe, and let $C(u)$ be the nodes
+that cover $u$. We set some ordering in hich $\sigma(y_{1})<\sigma(y_{2})<\ldots<(y_{l})$.
+A node $u$ is owned by $y_{j}\in C(u)$ in $R_{i}$ and there is
+no $y_{r}\in C(u)$ s.t. $\sigma(y_{r})<\sigma(y_{j})$, when both
+$y_{j}$ and $y_{r}$ are a part of the optimal adaptive solution
+in $R_{i}$. Similarly as above, we define: $\alpha_{i}^{u}(y_{j})=\begin{cases}
+p(R_{i}) & \text{if \ensuremath{y_{j}} owns \ensuremath{u} in \ensuremath{R_{i}}}\\
+0 & o.w
+\end{cases}$ and $\alpha^{u}(y_{j}):=\sum_{i=1}^{m}\alpha_{i}^{u}(y_{j})$. Stated
+in these terms we have that: $OPT_{A}=\sum_{u\in U}\min\left\{ 1,\sum_{j\in C(u)}\alpha^{u}(y_{j})\right\} $ 
+
+It is easy to see that for every $u$ and every $y_{j}$ we have that
+$\alpha^{u}(y_{j})\leq(y_{j})$ which implies: $OPT_{A}=\sum_{u\in U}\min\left\{ 1,\sum_{j\in C(u)}\alpha^{u}(y_{j})\right\} \leq\sum_{u\in U}\min\left\{ 1,\sum_{j\in C(u)}p(y_{j})q_{j}\right\} \leq OPT_{L(\cdot|S)}.$This
+shows that in expectation the value of the optimal adaptive solution
+is no greater than the value of its corresponding solution in $L(\cdot|S)$,
+which is a lower bound on $OPT_{L}$.
+
+

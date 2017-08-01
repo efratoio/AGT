@@ -85,9 +85,9 @@
 \newcommand{\reminderb}[1]{\textcolor{blue}{[[[#1]]]}}
 \newcommand{\tbd}[1]{TBD: #1}
 \newcommand{\reminder}[1]{\textcolor{red}{[[[#1]]]}}
-\newcommand{\daniel}[1]{\reminder{\bf (Daniel)~#1}{\typeout{#1}}}
-\newcommand{\nave}[1]{\reminder{\bf (Efrat)~#1}{\typeout{#1}}}
-\newcommand{\amir}[1]{\reminderb{\bf (Amir)~#1}{\typeout{#1}}}
+\newcommand{\lotan}[1]{\reminder{\bf (Lotan)~#1}{\typeout{#1}}}
+\newcommand{\efrat}[1]{\reminder{\bf (Efrat)~#1}{\typeout{#1}}}
+\newcommand{\naama}[1]{\reminderb{\bf (Naama)~#1}{\typeout{#1}}}
 
 %\newcommand{\daniel}[1]{}
 %\newcommand{\amir}[1]{}
@@ -211,11 +211,10 @@
 \usepackage{paralist}
 \begin{document}
 \title{Adaptive Seeding in Social Networks}
-\author{Efrat,Lotan,Naama}
-%\author{Daniel Deutch, Nave Frost, Amir Gilad \\ Tel Aviv University}
+\author{Efrat Abramovitz, Naama Boer, Lotan Faygler \\ Tel Aviv University}
 
 
-%\affil{Computer Science Department, Tel Aviv University} \\
+\affil{Computer Science Department, Tel Aviv University} \\
 
 \maketitle
 
@@ -233,11 +232,12 @@
 \input{intro}
 \input{prelim}
 \input{models}
+\input{privatecases}
 \input{results}
 
 
 \bibliographystyle{abbrv}
-{\small
+{\large
 \bibliography{bibShort}
 }
 %\newpage

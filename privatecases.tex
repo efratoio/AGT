@@ -1,0 +1,48 @@
+%!TEX root = main.tex
+
+\section{private cases}
+\subsection{private cases - simpler approaches from paper 1}
+
+Given a network $G=(V,E)$, an influence function $f:2^{V}\rightarrow\mathbb{R}_{+}$we
+define the following function $F_{H,t}:2^{X}\rightarrow R_{+}$, for
+a subgraph $H$ and parameter $t\in\mathbb{N}$ as: $F_{H,t}(S):=\max_{T\subseteq N(S):|T|\leq k}f(S\cup T)$. 
+
+If $F_{H,t}(\cdot)$ is monotone submodular for all $t\leq k$ and
+all graphs $H$, Sample Average Approximation (SAA) is a simple technique
+which obtains an approximately $(1-1/e)$-approximation. The adaptive
+seeding two stage problem can be formulated as the following optimization
+problem: $\max\left\{ \sum_{H\in G}p_{H}F_{H,t}(S):S\subseteq X,|S|+y\leq k\right\} $.$\mathcal{G}$
+is the set of all possible realizations and $p_{H}$ is the probability
+of the bipartite graph $H=(X\cup R,E_{X,R})$ to realize where $R\subseteq N(X)$,
+$E_{X,R}$ being the set of edges between $X$ and $R$ in the network
+$G=(V,E)$. $F_{t}(S)=\sum_{H\in G}p_{H}F_{H,t}(S)$ is a monotone
+submodular function since it is a weighted sum of monotone submodular
+functions for any $t\leq k-1$. $F_{t}(S)$ can be approximated by
+sampling polynomially many graphs (as demonstrated in the triggering
+model chapter of this survey), and the greedy algorithm for submodular
+maximization by Nemhauser can be used to obtain a $(1-1/e-\epsilon)$-approximation
+for any $\epsilon>0$. By repeating this procedure for every $t\in\{0,\ldots,k-1\}$
+and returning the solution $S\subseteq X$ with the maximal value,
+a $(1-1/e-\epsilon)$-approximation for the two stage problem can
+be obtained. 
+
+/
+
+In {[}Singer and Seeman 2013{]} two special cases of influence functions
+for which $F_{H,t}(\cdot)$ is monotone submodular are discussed.
+The first is \textbf{additive functions}. A function is additive when
+$f(S)=\sum_{i\in S}w_{i}$ for some fixed $w_{i},i\in[n]$. The well
+studied Voter model {[}34{]}, for example, is an additive influence
+function {[}19{]}. For such functions $F_{H,t}(\cdot)$ as defined
+above is monotone submodular. 
+
+The second case mentioned in {[}Singer and Seeman 2013{]} is \textbf{symmetric
+submodular functions}. A function is symmetric submodular when $f(T)=\sum_{i\leq T}r_{i}$
+where $r_{i}\in\mathbb{R}_{+}$ is some fixed set that respects $r_{1}\geq r_{2}\geq\ldots\geq r_{n}$,
+in which case the function $F_{H,t}(\cdot)$ is submodular. The proofs
+that additive functions and symmetric submodular functions are submodular
+are specified in the full version of the paper {[}Singer and Seeman
+2013{]}.
+
+
+\input{additiveKnapsack}
